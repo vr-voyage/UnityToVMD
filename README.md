@@ -2,6 +2,10 @@
 
 ![Rotations are completely off at the moment](https://raw.githubusercontent.com/vr-voyage/UnityToVMD/main/Screenshots/First-try-bad-rotations.png)
 
+Model on the screenshot :
+
+[https://3d.nicovideo.jp/works/td29560](「アライグマ」) by [https://3d.nicovideo.jp/users/196981](Schwarz)
+
 # Unity animation to VMD
 
 I'm just trying to convert Mecanim Unity animations
