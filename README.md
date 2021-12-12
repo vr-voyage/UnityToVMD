@@ -1,5 +1,6 @@
 # CURRENTLY BROKEN
 
+![Rotations are completely off at the moment](https://raw.githubusercontent.com/vr-voyage/UnityToVMD/main/Screenshots/First-try-bad-rotations.png)
 
 # Unity animation to VMD
 
