@@ -4,7 +4,7 @@
 
 Model on the screenshot :
 
-[https://3d.nicovideo.jp/works/td29560](「アライグマ」) by [https://3d.nicovideo.jp/users/196981](Schwarz)
+[「アライグマ」](https://3d.nicovideo.jp/works/td29560) by [Schwarz](https://3d.nicovideo.jp/users/196981)
 
 # Unity animation to VMD
 
