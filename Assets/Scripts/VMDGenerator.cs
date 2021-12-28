@@ -83,7 +83,7 @@ namespace Myy
 			transformRotation.y = -transformRotation.y;
 			
 			transformRotation.w = -transformRotation.w;
-			return transformRotation;			
+			return transformRotation;
 		}
 
 
@@ -98,6 +98,11 @@ namespace Myy
 			return $"[{prop.x}, {prop.y}, {prop.z}]";
 		}
 
+		public static float ReadableAngle(float angle)
+		{
+			return angle <= 180 ? angle : -360 + angle;
+		}
+
 		/// <summary>Quaternion to string function.
 		/// <para>It's slightly better than toString, since it converts the
 		/// Quaternion to Euler Angles and then displays each
@@ -108,8 +113,8 @@ namespace Myy
 
 		public static string StringProp(Quaternion prop)
 		{
-			return StringProp(prop.eulerAngles);
-			//return $"[{prop.x}, {prop.y}, {prop.z}]";
+			Vector3 angles = prop.eulerAngles;
+			return $"[{ReadableAngle(angles.x)}, {ReadableAngle(angles.y)}, {ReadableAngle(angles.z)}]";
 		}
 
 		/* Most of the code fater that comes from Lox VMDMotion,
@@ -503,7 +508,7 @@ namespace Myy
 			bkf.Name        = name;
 			bkf.FrameNumber = frameNumber;
 			bkf.Position    = position;
-			bkf.Rotation    = VMDRotation(rotation);
+			bkf.Rotation    =  VMDRotation(rotation);
 			bkf.Interp = (new BezierInterpolator(), new BezierInterpolator(), new BezierInterpolator(), new BezierInterpolator());
 			BoneKeyframes.Add(bkf);
 		}

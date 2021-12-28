@@ -56,6 +56,7 @@ public class AnimToMMD : MonoBehaviour
     }
 
     Quaternion[] baseRotations;
+    Quaternion[] baseLocalRotations;
     Vector3[] basePositions;
 
     void Start()
@@ -64,26 +65,34 @@ public class AnimToMMD : MonoBehaviour
         nElementsToDump = Mathf.Min(bonesTransforms.Length, bonesMMDnames.Length);
 
         baseRotations = new Quaternion[nElementsToDump];
+        baseLocalRotations = new Quaternion[nElementsToDump];
         basePositions = new Vector3[nElementsToDump];
         for (int i = 0; i < nElementsToDump; i++)
         {
-            baseRotations[i] = bonesTransforms[i].rotation;
-            basePositions[i] = bonesTransforms[i].localPosition;
+            baseRotations[i]      = bonesTransforms[i].rotation;
+            baseLocalRotations[i] = bonesTransforms[i].localRotation;
+            basePositions[i]      = bonesTransforms[i].localPosition;
         }
 
         animator = GetComponent<Animator>();
 
-
-        animator.Play(animationStateName, 0, 0);
         clipFrameRate = clipOfThisState.frameRate;
-        clipLength = clipOfThisState.length;
-        vmd.VMDName = vmdModelName;
-
-
+        clipLength    = clipOfThisState.length;
+        vmd.VMDName   = vmdModelName;
     }
 
 
     float elapsedTime = 0;
+
+    /*void ResetBones()
+    {
+        for (int tIndex = 0; tIndex < nElementsToDump; tIndex++)
+        {
+            Transform t = bonesTransforms[tIndex];
+            t.localPosition = basePositions[tIndex];
+            t.rotation = baseRotations[tIndex];
+        }
+    }*/
 
     /* The idea is pretty dumb here :
      * Play an animation at different intervals, on the character.
@@ -92,15 +101,18 @@ public class AnimToMMD : MonoBehaviour
      */
     void Update()
     {
-
+        if (Time.deltaTime > 0.01) return;
         animator.Play(animationStateName, 0, elapsedTime);
         for (int tIndex = 0; tIndex < nElementsToDump; tIndex++)
         {
             Transform t = bonesTransforms[tIndex];
-            vmd.AddBoneFrame(
-                bonesMMDnames[tIndex], gameFrame,
-                t.localPosition - basePositions[tIndex],
-                GetRotationDeltaWorld(baseRotations[tIndex], t.rotation));
+            vmd.AddBoneFrame(bonesMMDnames[tIndex], gameFrame,
+                 t.localPosition - basePositions[tIndex],
+                 GetRotationDeltaWorld(baseRotations[tIndex], t.rotation));
+            /* Cancel the current parent rotation, to get the right
+                * child rotation.
+                */
+            t.localRotation = baseLocalRotations[tIndex];
         }
 
         gameFrame++;
@@ -108,9 +120,9 @@ public class AnimToMMD : MonoBehaviour
         {
             vmd.Write(vmdFilePath);
             gameObject.SetActive(false);
-            
         }
         elapsedTime += Time.deltaTime;
+
     }
 
 
