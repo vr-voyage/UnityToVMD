@@ -18,5 +18,5 @@ Mecanim向けのUnityアニメーションをVMDに変換するつもりです�
 
 Models used in screenshots :
 
-[「デグー」](https://3d.nicovideo.jp/works/td65420) by [Kachin](https://3d.nicovideo.jp/users/8829462)
-[「アライグマ」](https://3d.nicovideo.jp/works/td29560) by [Schwarz](https://3d.nicovideo.jp/users/196981)
+* [「デグー」](https://3d.nicovideo.jp/works/td65420) by [Kachin](https://3d.nicovideo.jp/users/8829462)
+* [「アライグマ」](https://3d.nicovideo.jp/works/td29560) by [Schwarz](https://3d.nicovideo.jp/users/196981)
