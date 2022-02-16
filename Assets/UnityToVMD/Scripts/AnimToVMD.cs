@@ -122,15 +122,17 @@ public class AnimToVMD : MonoBehaviour
         for (int tIndex = 0; tIndex < nElementsToDump; tIndex++)
         {
             Transform t = bonesTransforms[tIndex];
-             vmd.AddBoneFrame(
+            vmd.AddBoneFrame(
                 bonesMMDnames[tIndex], gameFrame,
-                t.localPosition - basePositions[tIndex],
+                tIndex != 0 ? (t.localPosition - basePositions[tIndex]) : Vector3.zero,
                 GetRotationDeltaWorld(baseRotations[tIndex], t.rotation));
+            
             /* Cancel the current parent rotation, to get the right
-                * child rotation.
-                */
+             * child rotation.
+             */
             t.localRotation = baseLocalRotations[tIndex];
         }
+        vmd.AddIKFrame(gameFrame, false, "左足ＩＫ", "左つま先ＩＫ", "右足ＩＫ", "右つま先ＩＫ");
 
         gameFrame++;
         if (elapsedTime > clipOfThisState.length)

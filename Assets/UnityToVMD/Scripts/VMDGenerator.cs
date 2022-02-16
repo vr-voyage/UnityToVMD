@@ -239,7 +239,6 @@ namespace Myy
 			}
 		}
 
-		/* Not used here (yet) */
 		public class IKKeyframe {
 			public int FrameNumber;
 			public bool Display;
@@ -253,6 +252,19 @@ namespace Myy
 				IKEnable = new (string, bool)[binaryReader.ReadInt32()];
 				for(int i = 0; i < IKEnable.Length; i++)
 					IKEnable[i] = (VMD.ReadString(binaryReader, 20), binaryReader.ReadByte() != 0);
+			}
+
+			public void WriteTo(BinaryWriter binaryWriter)
+			{
+				//Debug.Log($"Writing Bone : {Name} - {FrameNumber} - {StringProp(Position)} - {StringProp(Rotation)}");
+				VMD.WriteInt(binaryWriter, FrameNumber);
+				VMD.WriteByte(binaryWriter, (byte) (Display ? 1 : 0));
+				VMD.WriteInt(binaryWriter, IKEnable.Length);
+				foreach ((string, bool) ikState in IKEnable)
+				{
+					VMD.WriteSJISString(binaryWriter, ikState.Item1, 20);
+					VMD.WriteByte(binaryWriter, (byte) (ikState.Item2 ? 1 : 0));
+				}
 			}
 		}
 
@@ -330,6 +342,11 @@ namespace Myy
 			writer.Write(value);
 		}
 
+		public static void WriteByte(BinaryWriter writer, byte value)
+		{
+			writer.Write(value);
+		}
+
 		public static void WriteVector3(BinaryWriter writer, Vector3 value)
 		{
 			writer.Write(value.x);
@@ -386,7 +403,11 @@ namespace Myy
 			// SelfShadow   /* Not used here */
 			VMD.WriteInt(binaryWriter, 0);
 			// IK 		    /* Not used here */
-			VMD.WriteInt(binaryWriter, 0);
+			VMD.WriteInt(binaryWriter, IKKeyframes.Count);
+			foreach (IKKeyframe ikf in IKKeyframes)
+			{
+				ikf.WriteTo(binaryWriter);
+			}
 
 		}
 
@@ -513,6 +534,26 @@ namespace Myy
 			BoneKeyframes.Add(bkf);
 		}
 
+		public void AddIKFrame(
+			int frameNumber,
+			bool isEnabled,
+			params string[] names)
+		{
+			int nNames = names.Length;
+			(string, bool)[] iksStates = new (string, bool)[nNames];
+			for (int i = 0; i < nNames; i++)
+			{
+				iksStates[i] = (names[i], isEnabled);
+			}
+			IKKeyframes.Add(
+				new IKKeyframe()
+				{
+					FrameNumber = frameNumber,
+					Display = true,
+					IKEnable = iksStates
+				});
+
+		}
 
 	}
 
