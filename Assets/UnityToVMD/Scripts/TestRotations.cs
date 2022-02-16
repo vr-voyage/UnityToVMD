@@ -44,6 +44,12 @@ public class TestRotations : MonoBehaviour
             locals[i]  = transforms[i].localRotation;
             vectors[i] = transforms[i].localPosition;
         }
+
+        Quaternion q = Quaternion.Euler(0, 0, 0);
+        Quaternion r = Quaternion.Euler(60, 25, 10);
+        Quaternion qCancelled = q * Quaternion.Inverse(r);
+        Debug.Log(VMD.StringProp(q));
+        Debug.Log(VMD.StringProp(qCancelled));
     }
 
     // Update is called once per frame
@@ -51,28 +57,16 @@ public class TestRotations : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.T))
         {
-            for (int i = 0; i < nElementsToDump; i++)
+            for (int i = 1; i < nElementsToDump; i++)
             {
-
                 Transform t = transforms[i];
-                Debug.Log(t.name);
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(globals[i], t.rotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(t.rotation, globals[i])));
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(globals[i], t.localRotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(t.rotation, globals[i])));
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(locals[i], t.rotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(t.rotation, locals[i])));
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(locals[i], t.localRotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaSelf(t.rotation, locals[i])));               
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(globals[i], t.rotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(t.rotation, globals[i])));
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(globals[i], t.localRotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(t.rotation, globals[i])));
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(locals[i], t.rotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(t.rotation, locals[i])));
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(locals[i], t.localRotation)));
-                Debug.Log(VMD.StringProp(GetRotationDeltaWorld(t.rotation, locals[i])));       
+                Quaternion q = t.rotation * Quaternion.Inverse(globals[i]);
+                Quaternion p = transforms[i-1].rotation * Quaternion.Inverse(globals[i-1]);
+                q = q * Quaternion.Inverse(p);
+                Debug.Log(VMD.StringProp(VMD.MMDRotation(q)));
             }
         }
+
+
     }
 }
